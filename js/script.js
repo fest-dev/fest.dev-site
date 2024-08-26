@@ -18,6 +18,23 @@ const reviews = new Swiper('.reviews', {
     }
 });
 
+let lastActiveIndex = reviews.activeIndex;
+
+reviews.on('slideChange', function() {
+    const currentIndex = reviews.activeIndex;
+    if (currentIndex !== lastActiveIndex) {
+        const previousSlide = reviews.slides[lastActiveIndex];
+        const expandedElements = previousSlide.querySelectorAll('.expanded');
+
+        if (expandedElements.length > 0) {
+            expandedElements.forEach(function(element) {
+                element.classList.remove('expanded');
+            });
+        }
+        lastActiveIndex = currentIndex;
+    }
+});
+
 function setEqualHeight() {
     var reviews = document.querySelectorAll('.review');
     var maxHeight = 0;
@@ -77,12 +94,51 @@ document.addEventListener('click', function(e) {
         if (link) {
             navigator.clipboard.writeText(link.textContent).then(function() {
                 console.log('Copied');
+                copyBtn.classList.add('active');
             }).catch(function(err) {
                 console.error('Error: ', err);
             });
         }
     }
 });
+
+document.addEventListener('DOMContentLoaded', function() {
+    const copyBtns = document.querySelectorAll('.copy-btn');
+    let currentlyActive = null;
+
+    function removeActiveClass(e) {
+        let isClickInside = false;
+
+        copyBtns.forEach(function(btn) {
+            if (btn.contains(e.target)) {
+                isClickInside = true;
+
+                if (currentlyActive && currentlyActive !== btn) {
+                    currentlyActive.classList.remove('active');
+                }
+
+                currentlyActive = btn;
+            }
+        });
+
+        if (!isClickInside && currentlyActive) {
+            currentlyActive.classList.remove('active');
+            currentlyActive = null;
+        }
+    }
+
+    document.addEventListener('click', removeActiveClass);
+
+    copyBtns.forEach(function(btn) {
+        btn.addEventListener('focus', function() {
+            if (currentlyActive && currentlyActive !== btn) {
+                currentlyActive.classList.remove('active');
+            }
+            currentlyActive = btn;
+        }, true); 
+    });
+});
+
 
 let swiper;
 function initializeSwiper() {
