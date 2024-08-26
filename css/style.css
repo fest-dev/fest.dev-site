@@ -101,6 +101,10 @@ p:last-child {
     font-size: 0;
     line-height: 0;
 }
+
+html {
+    scroll-behavior: smooth;
+}
 @media (max-width: 767px) {
     :root {
         font-size: 18px;
@@ -138,6 +142,15 @@ header .container {
 @media (max-width: 767px) {
     .logo {
         max-width: 112.69px;
+    }
+
+    header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 999;
+        background: #FAFAFA;
     }
 }
 /* header end */
@@ -177,6 +190,10 @@ header .container {
     color: var(--color-white);
 }
 @media (max-width: 767px) {
+    #hero {
+        min-height: 100vh;
+        padding-top: 88px;
+    }
     #hero h1 {
         font-size: 26px;
         line-height: 36px;
@@ -745,9 +762,63 @@ footer h2 {
     background: transparent;
     transition: .3s ease-in-out;
     cursor: pointer;
+
+    position: relative;
 }
 .copy-btn:hover, .copy-btn.active {
     background: var(--color-primary);
+}
+.copy-btn:before {
+    content: 'Copied!';
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 65px;
+    height: 25px;
+    background-color: var(--color-black);
+    color: var(--color-white);
+    opacity: 0;
+    position: absolute;
+    border-radius: 2px;
+    font-size: 12px;
+    line-height: 12.44px;
+    transition: .3s ease-in-out;
+}
+.copy-btn:after {
+   width: 0px;
+   height: 0px;
+   border-style: solid;
+   content: '';
+   opacity: 0;
+   position: absolute;
+   transition: .3s ease-in-out;
+}
+li:first-child .copy-btn:before {
+    top:0;
+    left: 50%;
+    transform: translate(-50%, -30px);
+}
+li:last-child .copy-btn:before {
+    bottom:0;
+    left: 50%;
+    transform: translate(-50%, 30px);
+}
+li:first-child .copy-btn:after {
+    top:0;
+    left: 50%;
+    transform: translate(-50%, -7px);
+    border-width: 7px 4.5px 0 4.5px;
+    border-color: var(--color-black) transparent transparent transparent;
+}
+li:last-child .copy-btn:after {
+    bottom:0;
+    left: 50%;
+    transform: translate(-50%, 7px);
+    border-width: 0 4.5px 7px 4.5px;
+    border-color: transparent transparent var(--color-black) transparent;
+}
+.copy-btn.active:before, .copy-btn.active:after {
+    opacity: 1;
 }
 footer .copyright {
     text-align: center;
